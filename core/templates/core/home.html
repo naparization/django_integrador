@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block body %}
+
+<body style="background-color: rgb(14, 54, 57); color: white;">
+
+    <br><br><br>
+
+    <div
+        style="background: linear-gradient(190deg, #1f000d, #000000); width: 2000; height: 650; display: flex; align-items: center;">
+        <div style="padding-left: 30; font-size: 150px;">
+            <h1 style="font-size: 180px; color: #dab672; padding-left: 50;">Bem-Vindo</h1>
+            <h2 style="color: rgb(218, 182, 114); padding-left: 50; text-align: center;">Compre nossos bagulhos</h2>
+        </div>
+        <img style="margin-left: 150;" src="{% static 'core/img/OLDPOP.png' %}">
+    </div>
+    <br>
+    <br>
+    <h1 style="text-align: center;">Produtos:</h1>
+</body>
+<div
+    style="display: flex; align-items: center; padding-left: 200; flex-wrap: wrap; padding-top: 50; flex-basis: 25%; gap: 25px;">
+    <div class="card bg-dark"
+        style="width: 18rem; color: #dab672; box-shadow: 10px 10px 3px 2px rgba(0, 0, 0, 0.3); outline: 3px solid black;">
+        <img src="{% static 'core/img/prince_capa.jpg' %}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Item</h5>
+            <p class="card-text">R$ 100,00</p>
+            <a href="#" class="btn btn-success">Comprar</a>
+        </div>
+    </div>
+</div>
+<br><br>
+{% endblock %}
