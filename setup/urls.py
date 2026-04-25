@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.views import home
+from core.views import home, adicionar_ao_carrinho
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home),
+    path('', home, name='home'),
+    path('adicionar/carrinho/<str:id>', adicionar_ao_carrinho, name='adicionar_ao_carrinho')
 ]
