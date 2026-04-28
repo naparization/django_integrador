@@ -1,5 +1,4 @@
-from django.shortcuts import redirect, render
-
+from django.shortcuts import redirect, render, get_object_or_404
 from core.models import Album, Carrinho
 
 # Create your views here.
@@ -8,11 +7,11 @@ def home(request):
     listaAlbuns = Album.objects.all()
     return render(request, 'core/home.html', {'albuns': listaAlbuns})
 
+
 def adicionar_ao_carrinho(request, id):
     album = Album.objects.get(id=id)
-    Carrinho.objects.create(album = album)
-    
-    
+    Carrinho.objects.create(album=album)
+
     return redirect('home')
 
 def carrinhos(request):
