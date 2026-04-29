@@ -35,3 +35,19 @@ def finalizar_compra(request):
         Carrinho.objects.all().delete()
         
     return redirect('home')
+
+def editar_album(request, id):
+    album = get_object_or_404(Album, id=id)
+
+    if request.method == 'POST':
+        album.titulo = request.POST.get('titulo')
+        album.valor = request.POST.get('valor')
+        album.quantidade = request.POST.get('quantidade')
+
+        album.save()
+
+        return redirect('home')
+
+    return render(request, 'core/editar_album.html', {
+        'album': album
+    })
