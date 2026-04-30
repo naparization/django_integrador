@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from core.models import Album, Carrinho
+from core.models import Album, Artista, Carrinho
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
@@ -36,6 +38,7 @@ def finalizar_compra(request):
         
     return redirect('home')
 
+@login_required
 def editar_album(request, id):
     album = get_object_or_404(Album, id=id)
 
@@ -51,3 +54,37 @@ def editar_album(request, id):
     return render(request, 'core/editar_album.html', {
         'album': album
     })
+
+@login_required
+def novo_album(request):
+    if request.method == "POST":
+        titulo = request.POST.get('titulo')
+        valor = request.POST.get('valor')
+        artista = request.POST.get('artista')
+        quantidade = request.POST.get('quantidade')
+
+        Album.objects.create(titulo = titulo, valor = valor, quantidade = quantidade, artista_id = artista)
+        return redirect('home')
+    
+    return render(request, 'core/novo_album.html')
+
+def excluir_album(request, id):
+    album = Album.objects.get(id=id)
+    album.delete()
+
+    return redirect('home')
+
+@login_required
+def novo_artista(request):
+    if request.method == "POST":
+        titulo = request.POST.get('nome')
+
+        Artista.objects.create(nome = titulo)
+        return redirect('home')
+    
+    return render(request, 'core/novo_artista.html')
+
+@login_required
+def listar_artistas(request):
+    Artistas = Artista.objects.all()
+    return render(request, 'core/listar_artistas.html', {'artistas': Artistas})

@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block body %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nome</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        {% for artista in artistas %}
+        <tr>
+            <th scope="row">{{artista.id}}</th>
+            <td>{{artista.nome}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
