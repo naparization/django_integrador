@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+
+{% block body %}
+
+
+
+<h1>{{titulo}}</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    {% for field in form %}
+    {% if field.field.widget.input_type == 'checkbox' %}
+    <div class="checkbox-field">
+        {{ field }} {{ field.label_tag }}
+    </div>
+    {% else %}
+    <div>
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+    {% endif %}
+
+    {% for error in field.errors %}
+    <p class="erro">{{ error }}</p>
+    {% endfor %}
+    {% endfor %}
+
+    <div class="acoes">
+        <button type="submit">Salvar</button>
+        <a class="botao botao-secundario" href="{% url 'home' %}">Voltar</a>
+    </div>
+</form>
+{% endblock %}

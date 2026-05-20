@@ -1,6 +1,17 @@
+from multiprocessing import context
+from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse_lazy
+from core.forms import AlbumForm, ArtistaForm
 from core.models import Album, Artista, Carrinho
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from rest_framework import viewsets
+
+from core.serializers import AlbumSerializer
+
+from rest_framework.permissions import IsAuthenticated
+
 
 
 # Create your views here.
@@ -13,6 +24,7 @@ def home(request):
 def adicionar_ao_carrinho(request, id):
     album = Album.objects.get(id=id)
     Carrinho.objects.create(album=album)
+    messages.success(request, "Produto adicionado ao carrinho.")
 
     return redirect('home')
 
@@ -44,6 +56,7 @@ def editar_album(request, id):
 
     if request.method == 'POST':
         album.titulo = request.POST.get('titulo')
+        album.artista_id = request.POST.get('artista')
         album.valor = request.POST.get('valor')
         album.quantidade = request.POST.get('quantidade')
 
@@ -51,22 +64,22 @@ def editar_album(request, id):
 
         return redirect('home')
 
-    return render(request, 'core/editar_album.html', {
-        'album': album
+    return render(request, 'core/form.html', {
+        'album': album, 'form': AlbumForm(instance=album), 'titulo': 'Editar álbum' 
     })
 
-@login_required
-def novo_album(request):
-    if request.method == "POST":
-        titulo = request.POST.get('titulo')
-        valor = request.POST.get('valor')
-        artista = request.POST.get('artista')
-        quantidade = request.POST.get('quantidade')
+# @login_required
+# def novo_album(request):
+#     if request.method == "POST":
+#         titulo = request.POST.get('titulo')
+#         valor = request.POST.get('valor')
+#         artista = request.POST.get('artista')
+#         quantidade = request.POST.get('quantidade')
 
-        Album.objects.create(titulo = titulo, valor = valor, quantidade = quantidade, artista_id = artista)
-        return redirect('home')
+#         Album.objects.create(titulo = titulo, valor = valor, quantidade = quantidade, artista_id = artista)
+#         return redirect('home')
     
-    return render(request, 'core/novo_album.html')
+#     return render(request, 'core/novo_album.html')
 
 def excluir_album(request, id):
     album = Album.objects.get(id=id)
@@ -88,3 +101,33 @@ def novo_artista(request):
 def listar_artistas(request):
     Artistas = Artista.objects.all()
     return render(request, 'core/listar_artistas.html', {'artistas': Artistas})
+
+class AlbumCadastroView(CreateView):
+    model = Album
+    form_class = AlbumForm
+    success_url = reverse_lazy("novo_album")
+    template_name = 'core/form.html'
+    def get_context_data (self, **kwargs):
+        context = super().get_context_data(** kwargs)
+        context["titulo"] = "Cadastrar Novo Item"
+        return context
+
+class AlbumViewSet(viewsets.ModelViewSet):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
+
+class ArtistaCadastroView(CreateView):
+    model = Artista
+    form_class = ArtistaForm
+    success_url = reverse_lazy('novo_artista_2')
+    template_name = 'core/form.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["titulo"] = "Cadastrar Novo Artista"
+        return context
+    
+def excluir_item_carrinho(request, id):
+    item = Carrinho.objects.get(id=id)
+    item.delete()
+
+    return redirect('carrinho')

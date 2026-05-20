@@ -24,6 +24,12 @@
                         <td>{{item.id}}</td>
                         <td>{{item.album.titulo}}</td>
                         <td>{{item.album.valor}}</td>
+                        </td>
+                        <td>
+                            <form action="{% url 'excluir_item_carrinho' item.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">X</button>
+                            </form>
                     </tr>
                     {% endfor %}
                 </tbody>

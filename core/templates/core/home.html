@@ -7,6 +7,15 @@
 
     <br><br><br>
 
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+
     <div
         style="background: linear-gradient(190deg, #1f000d, #000000); width: 2000; height: 650; display: flex; align-items: center;">
         <div style="padding-left: 30; font-size: 150px;">
@@ -52,8 +61,8 @@
 <div style="display: flex; justify-content: center; align-items: center;">
     <div>
         {% if user.is_authenticated %}
-        <a href="/novo_disco" class="btn btn-warning">Novo disco</a>
-        <a href="/novo_artista" class="btn btn-warning">Novo artista</a>
+        <a href="/novo_album" class="btn btn-warning">Novo disco</a>
+        <a href="/novo_artista_2" class="btn btn-warning">Novo artista</a>
         <a href="/listar_artistas" class="btn btn-warning">Listar artistas</a>
         {% endif %}
     </div>
